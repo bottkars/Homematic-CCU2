@@ -12,7 +12,7 @@
 RootModule = 'Homematic-CCU2.psm1'
 
 # Die Versionsnummer dieses Moduls
-ModuleVersion = '0.5'
+ModuleVersion = '0.6'
 
 # Unterstützte PSEditions
 # CompatiblePSEditions = @()
