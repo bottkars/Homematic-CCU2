@@ -97,7 +97,7 @@ $Json_login = @{   "jsonrpc" = "1.1"
                         "password" = $Password}
             "id" = 1 }| ConvertTo-Json -Compress
 
-$Login = Invoke-RestMethod -Uri $baseuri -body $Json_login -Method Post -ContentType "application/json"  -Verbose
+$Login = Invoke-RestMethod -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"  -Verbose
 $global:ccu2session = $login.result
 Write-Output $Login
 }
