@@ -81,7 +81,7 @@ $Json
 }
 
 
-function Login-CCU2
+function Connect-CCU2
 {
 param(
 $ccu2_name = "homematic-ccu2.fritz.box",
@@ -102,7 +102,7 @@ $global:ccu2session = $login.result
 Write-Output $Login
 }
 
-function Logout-CCU2
+function Disconnect-CCU2
 {
 param(
 $ccu2_url =  $Global:ccu2url,
