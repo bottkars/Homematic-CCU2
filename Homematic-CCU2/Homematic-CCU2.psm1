@@ -165,6 +165,50 @@ $Json = @{   "jsonrpc" = "1.1"
 
 }
 
+#Interface.refreshDeployedDeviceFirmwareList
+
+function Update-CCU2DeployedDeviceFirmwareList
+{
+    [CmdletBinding()]
+    param(
+[ValidateSet('BidCos-RF','HmIP-RF','VirtualDevices')]$interface = "HmIP-RF",
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url)
+$method = "Interface.refreshDeployedDeviceFirmwareList"
+$Json = @{   "jsonrpc" = "1.1"
+            "method"= $method;
+            "params"= @{'_session_id_' = $session_id;
+            'interface' = $interface}
+            "id" = 1 }| ConvertTo-Json -Compress
+
+            write-verbose "Calling method $method with $json" 
+Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+}
+
+#Interface.updateFirmware
+
+function Update-CCU2DeviceFirmware {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidatePattern('[A-F,a-f,0-9]{14}')]
+        [string]$Device,        
+        [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Interface.updateFirmware"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+            "device"                = $Device
+            'interface'             = $interface
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+
+    write-verbose "Calling method $method with $json" 
+    Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+}
 
 function Connect-CCU2
 
