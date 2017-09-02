@@ -1,48 +1,134 @@
-function Get-CCU2Devices
+function Get-CCU2Version
 {
+[CmdletBinding()]
 param(
 $session_id = $global:ccu2session,
-$ccu2url = $global:ccu2url)
-$method = "Device.listAllDetail"
-#$method = "Device.listAllDetail"
+$ccu2url = $global:ccu2url
+)
+$method = "CCU.getVersion"
 $Json = @{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
+}
+            "id" = 1 }| ConvertTo-Json -Compress
+write-verbose "Calling methos $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
+}
+
+
+#CCU.restartSSHDaemon
+function Restart-CCU2SSHDaemon
+{
+[CmdletBinding()]
+param(
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url)
+$method = "CCU.restartSSHDaemon"
+$Json = @{   "jsonrpc" = "1.1"
+            "method"= $method;
+            "params"= @{'_session_id_' = $session_id;
+}
+            "id" = 1 }| ConvertTo-Json -Compress
+write-verbose "Calling methos $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
+}
+function Get-CCU2SSHState
+{
+[CmdletBinding()]
+param(
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url)
+$method = "CCU.getSSHState"
+$Json = @{   "jsonrpc" = "1.1"
+            "method"= $method;
+            "params"= @{'_session_id_' = $session_id;
+}
+            "id" = 1 }| ConvertTo-Json -Compress
+write-verbose "Calling methos $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
+}
+#CCU.getStickyUnreachState
+
+
+function Get-CCU2StickyUnreachState
+{
+    [CmdletBinding()]
+    param(
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url)
+$method = "CCU.StickyUnreachState"
+$Json = @{   "jsonrpc" = "1.1"
+            "method"= $method;
+            "params"= @{'_session_id_' = $session_id;
+}
+            "id" = 1 }| ConvertTo-Json -Compress
+write-verbose "Calling methos $method with $json"      
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
+}
+function Get-CCU2Serialnumber {
+    [CmdletBinding()]
+    param(
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "CCU.getSerial"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+    write-verbose "Calling methos $method with $json"
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
+}
+
+
+
+function Get-CCU2Devices {
+    [CmdletBinding()]
+    param(
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Device.listAllDetail"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
             #'interface' = $interface
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+    write-verbose "Calling methos $method with $json"
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
+    #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+    #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+
 }
-            "id" = 1 }| ConvertTo-Json -Compress
-
-$Json
-(Invoke-RestMethod -Uri $ccu2url -body $json -Method Post -ContentType "application/json" -Verbose).result 
-#| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-#(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-
-}
 
 
-function Get-CCU2Interfaces
-{
-param(
-$session_id = $global:ccu2session,
-$ccu2url = $global:ccu2url)
-$method = "Interface.listInterfaces"
-#$method = "Device.listAllDetail"
-$Json = @{   "jsonrpc" = "1.1"
-            "method"= $method;
-            "params"= @{'_session_id_' = $session_id;
-            }
-            "id" = 1 }| ConvertTo-Json -Compress
+function Get-CCU2Interfaces {
+    [CmdletBinding()]
+    param(
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Interface.listInterfaces"
+    #$method = "Device.listAllDetail"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
 
-$Json
-(Invoke-RestMethod -Uri $ccu2url -body $json -Method Post -ContentType "application/json" -Verbose).result 
-#| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-#(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+    write-verbose "Calling methos $method with $json"
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
+    #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+    #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 
 }
 
 function Get-CCU2Actors
-{
-param(
+ {
+    [CmdletBinding()]
+    param(
 [ValidateSet('BidCos-RF','HmIP-RF','VirtualDevices')]$interface = "HmIP-RF",
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
@@ -54,15 +140,16 @@ $Json = @{   "jsonrpc" = "1.1"
             'interface' = $interface}
             "id" = 1 }| ConvertTo-Json -Compress
 
-$Json
-(Invoke-RestMethod -Uri $ccu2url -body $json -Method Post -ContentType "application/json" -Verbose).result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+write-verbose "Calling methos $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 
 }
 
 function Get-CCU2ActorsFirmwareState
 {
-param(
+    [CmdletBinding()]
+    param(
 [ValidateSet('BidCos-RF','HmIP-RF','VirtualDevices')]$interface = "HmIP-RF",
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
@@ -74,15 +161,18 @@ $Json = @{   "jsonrpc" = "1.1"
             'interface' = $interface}
             "id" = 1 }| ConvertTo-Json -Compress
 
-$Json
-(Invoke-RestMethod -Uri $ccu2url -body $json -Method Post -ContentType "application/json" -Verbose).result | select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+            write-verbose "Calling methos $method with $json" 
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result | select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 
 }
 
 
 function Connect-CCU2
+
 {
+    [CmdletBinding()]
+    
 param(
 $ccu2_name = "homematic-ccu2.fritz.box",
 $Username = "Admin",
@@ -97,23 +187,48 @@ $Json_login = @{   "jsonrpc" = "1.1"
                         "password" = $Password}
             "id" = 1 }| ConvertTo-Json -Compress
 
-$Login = Invoke-RestMethod -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"  -Verbose
+$Login = Invoke-CCU2method -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"
+
 $global:ccu2session = $login.result
 Write-Output $Login
 }
 
-function Disconnect-CCU2
-{
-param(
-$ccu2_url =  $Global:ccu2url,
-$Session_id = $Global:ccu2session
-)
-$Json_login = @{   "jsonrpc" = "1.1"
-            "method"= "Session.logout"
-            "params"= @{'_session_id_' = $session_id}
-            "id" = 1 }| ConvertTo-Json -Compress
-Invoke-RestMethod -Uri $ccu2_url -body $Json_login -Method Post -ContentType "application/json"  -Verbose
-
+function Disconnect-CCU2 {
+    [CmdletBinding()]
+    param(
+        $ccu2_url = $Global:ccu2url,
+        $Session_id = $Global:ccu2session
+    )
+    $Json_login = @{   "jsonrpc" = "1.1"
+        "method"                 = "Session.logout"
+        "params"                 = @{'_session_id_' = $session_id}
+        "id"                     = 1 
+    }| ConvertTo-Json -Compress
+    write-verbose "Calling methos $method with $json"
+    Invoke-CCU2method -Uri $ccu2_url -body $Json_login -Method Post -ContentType "application/json"
 }
 
 
+function Invoke-CCU2method 
+{
+    [CmdletBinding()]
+    param
+(
+$uri = $Global:ccu2url,
+$body,
+$method = "POST",
+$ContentType = "application/json" 
+)    
+
+try {
+    $result = Invoke-RestMethod -Uri $uri -body $body -Method $method -ContentType $ContentType
+            
+}
+catch {
+     write-host "error calling ccu2 with $body"
+     Write-Host $_.exception
+     break
+}
+Write-Verbose $result
+write-output $result
+}
