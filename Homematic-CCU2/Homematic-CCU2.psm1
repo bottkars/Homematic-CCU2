@@ -229,6 +229,55 @@ $Json = @{   "jsonrpc" = "1.1"
 
 }
 
+#Interface.getInstallMode
+function Get-CCU2HmIPInstallMode {
+    [CmdletBinding()]
+    param(
+        [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Interface.getInstallMode"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+            'interface'             = $interface;
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+    write-verbose "Calling method $method with $json" 
+    Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+}
+
+
+#Interface.setInstallModeHMIP
+#_session_id_ installMode interface on time address key keymode
+function Set-CCU2HmIPInstallMode {
+    [CmdletBinding()]
+    param(
+        [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
+        $session_id = $global:ccu2session,
+        #[parameter(mandatory = $false)][ValidateRange(1,120)][int]$time = 60,
+        $ccu2url = $global:ccu2url)
+    $method = "Interface.setInstallModeHMIP"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+            'interface'             = $interface;
+            'installMode'           = 'online'
+            'on'                    = '1';
+            'address'               = '';
+            'key'                   = ''
+            'keymode'               = ''
+            'time'                  = ''
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+
+    write-verbose "Calling method $method with $json" 
+    Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+}
+
+
 #Interface.refreshDeployedDeviceFirmwareList
 
 function Update-CCU2DeployedDeviceFirmwareList
@@ -254,8 +303,8 @@ Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "applicati
 function Update-CCU2DeviceFirmware {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true)]
-        [ValidatePattern('[A-F,a-f,0-9]{14}')]
+        #[Parameter(Mandatory = $true)]
+        #[ValidatePattern('[A-F,a-f,0-9]{14}')]
         [string][alias('address')]$Device,        
         [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
         $session_id = $global:ccu2session,
