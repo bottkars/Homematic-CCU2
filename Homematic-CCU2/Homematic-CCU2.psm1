@@ -83,7 +83,7 @@ function Get-CCU2Serialnumber {
 
 
 
-function Get-CCU2Devices {
+function Get-CCU2DeviceDetails {
     [CmdletBinding()]
     param(
         $session_id = $global:ccu2session,
@@ -110,7 +110,6 @@ function Get-CCU2Interfaces {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Interface.listInterfaces"
-    #$method = "Device.listAllDetail"
     $Json = @{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
@@ -125,7 +124,7 @@ function Get-CCU2Interfaces {
 
 }
 
-function Get-CCU2Actors
+function Get-CCU2Devices
  {
     [CmdletBinding()]
     param(
@@ -146,7 +145,7 @@ write-verbose "Calling methos $method with $json"
 
 }
 
-function Get-CCU2ActorsFirmwareState
+function Get-CCU2DeviceFirmwareState
 {
     [CmdletBinding()]
     param(
@@ -154,7 +153,6 @@ function Get-CCU2ActorsFirmwareState
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Interface.listDevices"
-#$method = "Device.listAllDetail"
 $Json = @{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
@@ -186,9 +184,7 @@ $Json_login = @{   "jsonrpc" = "1.1"
             "params"= @{'username' = $Username
                         "password" = $Password}
             "id" = 1 }| ConvertTo-Json -Compress
-
 $Login = Invoke-CCU2method -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"
-
 $global:ccu2session = $login.result
 Write-Output $Login
 }
