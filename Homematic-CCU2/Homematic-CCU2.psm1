@@ -123,6 +123,71 @@ function Get-CCU2Interfaces {
     #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 
 }
+#Device.get
+function Get-CCU2Device
+{
+   [CmdletBinding()]
+   param(
+#[ValidateSet('BidCos-RF','HmIP-RF','VirtualDevices')]$interface = "HmIP-RF",
+[Parameter(Mandatory = $true)]
+#[ValidatePattern('[A-F,a-f,0-9]{14}')]
+[string][alias('ID')]$Device_id,     
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url)
+$method = "Device.get"
+$Json = @{   "jsonrpc" = "1.1"
+           "method"= $method;
+           "params"= @{'_session_id_' = $session_id;
+           'id' = $Device_id}
+           "id" = 1 }| ConvertTo-Json -Compress
+
+write-verbose "Calling method $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+}
+
+
+
+#Device.listAll
+function Get-CCU2ConfiguredDevices {
+    [CmdletBinding()]
+    param(
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Device.listAll"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+
+    write-verbose "Calling method $method with $json"
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+}
+#Interface.getDeviceDescription
+
+function Get-CCU2DeviceDescription {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidatePattern('[A-F,a-f,0-9]{14}')]
+        [string][alias('device')]$address,        
+        [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
+        $session_id = $global:ccu2session,
+        $ccu2url = $global:ccu2url)
+    $method = "Interface.getDeviceDescription"
+    $Json = @{   "jsonrpc" = "1.1"
+        "method"           = $method;
+        "params"           = @{'_session_id_' = $session_id;
+            "interface"             = $interface;
+            "address"               = $address
+        }
+        "id"               = 1 
+    }| ConvertTo-Json -Compress
+
+    write-verbose "Calling method $method with $json"
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
+}
 
 function Get-CCU2Devices
  {
@@ -132,7 +197,6 @@ function Get-CCU2Devices
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Interface.listDevices"
-#$method = "Device.listAllDetail"
 $Json = @{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
@@ -192,7 +256,7 @@ function Update-CCU2DeviceFirmware {
     param(
         [Parameter(Mandatory = $true)]
         [ValidatePattern('[A-F,a-f,0-9]{14}')]
-        [string]$Device,        
+        [string][alias('address')]$Device,        
         [ValidateSet('BidCos-RF', 'HmIP-RF', 'VirtualDevices')]$interface = "HmIP-RF",
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
