@@ -5,6 +5,8 @@ the goal of this module is to get information from you CCU2 without using the We
 This is helpful specially for Dokumentation, Firmwareupdates etc.
 
 The Module can be installed from the Powershell Module Gallery.
+![homematic-ccu2](https://user-images.githubusercontent.com/8255007/29993823-6b518730-8fc2-11e7-888a-052bc127d355.gif)
+
 
 ## Installation
 ```Powershell
