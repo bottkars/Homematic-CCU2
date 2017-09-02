@@ -186,7 +186,7 @@ $Json_login = @{   "jsonrpc" = "1.1"
             "id" = 1 }| ConvertTo-Json -Compress
 $Login = Invoke-CCU2method -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"
 $global:ccu2session = $login.result
-$host.ui.RawUI.WindowTitle = "Connected to $ccu2_name with SessionID $($Global:ccu2session) as $User"
+$host.ui.RawUI.WindowTitle = "Connected to $ccu2_name with SessionID $($Global:ccu2session) as $Username"
 Write-Output $Login
 }
 
