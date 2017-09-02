@@ -9,10 +9,10 @@
 @{
 
 # Die diesem Manifest zugeordnete Skript- oder Binärmoduldatei.
-# RootModule = ''
+RootModule = 'Homematic-CCU2.psm1'
 
 # Die Versionsnummer dieses Moduls
-ModuleVersion = '0.1'
+ModuleVersion = '0.2'
 
 # Unterstützte PSEditions
 # CompatiblePSEditions = @()
