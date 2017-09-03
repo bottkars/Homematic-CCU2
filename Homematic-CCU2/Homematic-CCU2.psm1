@@ -340,7 +340,7 @@ $Json_login = @{   "jsonrpc" = "1.1"
             "method"= "Session.login"
             "params"= @{'username' = $Username
                         "password" = $Password}
-            "id" = 1 }| ConvertTo-Json -Compress
+            "id" = 2 }| ConvertTo-Json -Compress
 $Login = Invoke-CCU2method -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"
 $global:ccu2session = $login.result
 $host.ui.RawUI.WindowTitle = "Connected to $ccu2_name with SessionID $($Global:ccu2session) as $Username"
@@ -438,5 +438,8 @@ $Json = @{   "jsonrpc" = "1.1"
             "params"= ""
             "id" = 1 }| ConvertTo-Json -Compress
 write-verbose "Calling method $method with $json"
-Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+$api = Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
+#cleaning wron formatted json
+$myresult = $api -replace ",}","}" | ConvertFrom-Json
+write-output $myresult.result
 }
