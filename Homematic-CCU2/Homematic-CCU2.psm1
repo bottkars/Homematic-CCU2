@@ -131,7 +131,7 @@ function Get-CCU2Device {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'id'                    = $Device_id
+            'id'                             = $Device_id
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -175,8 +175,8 @@ function Get-CCU2DeviceDescription {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            "interface"             = $interface;
-            "address"               = $address
+            "interface"                      = $interface;
+            "address"                        = $address
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -195,7 +195,7 @@ function Get-CCU2Devices {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'interface'             = $interface
+            'interface'                      = $interface
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -214,7 +214,7 @@ function Get-CCU2DeviceFirmwareState {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'interface'             = $interface
+            'interface'                      = $interface
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -234,7 +234,7 @@ function Get-CCU2HmIPInstallMode {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'interface'             = $interface;
+            'interface'                      = $interface;
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -256,13 +256,13 @@ function Set-CCU2HmIPInstallMode {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'interface'             = $interface;
-            'installMode'           = 'online'
-            'on'                    = '1';
-            'address'               = '';
-            'key'                   = ''
-            'keymode'               = ''
-            'time'                  = ''
+            'interface'                      = $interface;
+            'installMode'                    = 'online'
+            'on'                             = '1';
+            'address'                        = '';
+            'key'                            = ''
+            'keymode'                        = ''
+            'time'                           = ''
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -284,7 +284,7 @@ function Update-CCU2DeployedDeviceFirmwareList {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'interface'             = $interface
+            'interface'                      = $interface
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -308,8 +308,8 @@ function Update-CCU2DeviceFirmware {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            "device"                = $Device
-            'interface'             = $interface
+            "device"                         = $Device
+            'interface'                      = $interface
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -433,7 +433,10 @@ function Invoke-CCU2method {
                 write-host "method not found"
             }
             402	{
-                write-host "argument not fount"
+                write-host "argument not found"
+            }
+            501	{
+                write-host "WebSite might not be ready yet, did you reboot the CCU2 ?"    
             }
             default {
                 write-host "Application Specific error $($result.error.code) occured"
@@ -567,7 +570,7 @@ function Get-CCU2Subsection {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'id'                    = $channel_id
+            'id'                             = $channel_id
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
@@ -610,7 +613,7 @@ function Get-CCU2SysVar {
     $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                    = $method;
         "params"                    = [ordered]@{'_session_id_' = $session_id;
-            'id'                    = $var_id    
+            'id'                             = $var_id    
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
