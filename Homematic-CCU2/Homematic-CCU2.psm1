@@ -6,7 +6,7 @@ $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url
 )
 $method = "CCU.getVersion"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
 }
@@ -24,7 +24,7 @@ param(
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "CCU.restartSSHDaemon"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
 }
@@ -39,7 +39,7 @@ param(
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "CCU.getSSHState"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
 }
@@ -57,7 +57,7 @@ function Get-CCU2StickyUnreachState
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "CCU.StickyUnreachState"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
 }
@@ -71,7 +71,7 @@ function Get-CCU2Serialnumber {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "CCU.getSerial"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
         }
@@ -89,7 +89,7 @@ function Get-CCU2DeviceDetails {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Device.listAllDetail"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
             #'interface' = $interface
@@ -98,9 +98,6 @@ function Get-CCU2DeviceDetails {
     }| ConvertTo-Json -Compress
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
-    #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-    #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-
 }
 
 
@@ -110,7 +107,7 @@ function Get-CCU2Interfaces {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Interface.listInterfaces"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
         }
@@ -119,9 +116,6 @@ function Get-CCU2Interfaces {
 
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
-    #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-    #(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-
 }
 #Device.get
 function Get-CCU2Device
@@ -135,14 +129,14 @@ function Get-CCU2Device
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Device.get"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
            "method"= $method;
            "params"= @{'_session_id_' = $session_id;
            'id' = $Device_id}
            "id" = 1 }| ConvertTo-Json -Compress
 
 write-verbose "Calling method $method with $json"
-(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
 
 
@@ -154,7 +148,7 @@ function Get-CCU2ConfiguredDevices {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Device.listAll"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
         }
@@ -162,8 +156,9 @@ function Get-CCU2ConfiguredDevices {
     }| ConvertTo-Json -Compress
 
     write-verbose "Calling method $method with $json"
-    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
+    (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
+
 #Interface.getDeviceDescription
 
 function Get-CCU2DeviceDescription {
@@ -176,7 +171,7 @@ function Get-CCU2DeviceDescription {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Interface.getDeviceDescription"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
             "interface"             = $interface;
@@ -197,16 +192,14 @@ function Get-CCU2Devices
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Interface.listDevices"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
             'interface' = $interface}
             "id" = 1 }| ConvertTo-Json -Compress
 
 write-verbose "Calling method $method with $json"
-(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result #| select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-#(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
 }
 
 function Get-CCU2DeviceFirmwareState
@@ -217,16 +210,14 @@ function Get-CCU2DeviceFirmwareState
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Interface.listDevices"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
             'interface' = $interface}
             "id" = 1 }| ConvertTo-Json -Compress
 
             write-verbose "Calling method $method with $json" 
-(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result | select address,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-#(Invoke-RestMethod -Uri "$baseuri" -body $json -Method Post -ContentType "application/json").result | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
-
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result | select address,type,firmware,availableFirmware,updatable,firmwareUpdateState | where address -notmatch ":" |  Sort-Object -Descending -Property firmwareUpdateState | ft
 }
 
 #Interface.getInstallMode
@@ -237,7 +228,7 @@ function Get-CCU2HmIPInstallMode {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Interface.getInstallMode"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
             'interface'             = $interface;
@@ -259,7 +250,7 @@ function Set-CCU2HmIPInstallMode {
         #[parameter(mandatory = $false)][ValidateRange(1,120)][int]$time = 60,
         $ccu2url = $global:ccu2url)
     $method = "Interface.setInstallModeHMIP"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
             'interface'             = $interface;
@@ -288,7 +279,7 @@ function Update-CCU2DeployedDeviceFirmwareList
 $session_id = $global:ccu2session,
 $ccu2url = $global:ccu2url)
 $method = "Interface.refreshDeployedDeviceFirmwareList"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method;
             "params"= @{'_session_id_' = $session_id;
             'interface' = $interface}
@@ -310,7 +301,7 @@ function Update-CCU2DeviceFirmware {
         $session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url)
     $method = "Interface.updateFirmware"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method;
         "params"           = @{'_session_id_' = $session_id;
             "device"                = $Device
@@ -336,12 +327,12 @@ $Password = ""
 )
 $global:ccu2url = "http://$ccu2_name/api/homematic.cgi"
 
-$Json_login = @{   "jsonrpc" = "1.1"
+$json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= "Session.login"
             "params"= @{'username' = $Username
                         "password" = $Password}
             "id" = 2 }| ConvertTo-Json -Compress
-$Login = Invoke-CCU2method -Uri $global:ccu2url -body $Json_login -Method Post -ContentType "application/json"
+$Login = Invoke-CCU2method -Uri $global:ccu2url -body $json -Method Post -ContentType "application/json"
 $global:ccu2session = $login.result
 $host.ui.RawUI.WindowTitle = "Connected to $ccu2_name with SessionID $($Global:ccu2session) as $Username"
 Write-Output $Login
@@ -353,17 +344,33 @@ function Disconnect-CCU2 {
         $ccu2_url = $Global:ccu2url,
         $Session_id = $Global:ccu2session
     )
-    $Json_login = @{   "jsonrpc" = "1.1"
+    $json = [ordered]@{   "jsonrpc" = "1.1"
         "method"                 = "Session.logout"
         "params"                 = @{'_session_id_' = $session_id}
         "id"                     = 1 
     }| ConvertTo-Json -Compress
     write-verbose "Calling method $method with $json"
-    Invoke-CCU2method -Uri $ccu2_url -body $Json_login -Method Post -ContentType "application/json"
+    Invoke-CCU2method -Uri $ccu2_url -body $json -Method Post -ContentType "application/json"
     $host.ui.RawUI.WindowTitle = "Windows Powershell"
     
 }
-
+#Session.renew
+function Update-CCU2Session {
+    [CmdletBinding()]
+    param(
+        $ccu2_url = $Global:ccu2url,
+        $Session_id = $Global:ccu2session
+        )
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
+        "method"                 = "Session.renew"
+        "params"                 = @{'_session_id_' = $session_id}
+        "id"                     = 1 
+    }| ConvertTo-Json -Compress
+    write-verbose "Calling method $method with $json"
+    Invoke-CCU2method -Uri $ccu2_url -body $Json -Method Post -ContentType "application/json"
+    $host.ui.RawUI.WindowTitle = "Windows Powershell"
+    
+}
 
 function Invoke-CCU2method 
 {
@@ -385,13 +392,65 @@ catch {
      Write-Host $_.exception
      break
 }
+if ($($result.error))
+    {
+        write-warning "We got $($result.error), will evaluate $($result.error.code)"
+        switch ($result.error.code)
+            {
+                100	{
+                    write-Host "illegal request"}
+                101	{
+                    write-host "the element 'ID' missing in request"}
+                102	{
+                    write-host "the element 'method' missing in request"}
+                103	{
+                    write-host "the element 'parameters' missing in request"}
+                200	{
+                    write-host "illegal response"}
+                201	{
+                    write-host "the element 'ID' missing in response"}
+                202	{
+                    write-host "the element 'result' missing in response"}
+                203	{
+                    write-host "the element 'error' missing in response"}
+                300	{
+                    write-host "internal error"}
+                400	{
+                    write-host "user level insufficient"}
+                401	{
+                    write-host "method not found"}
+                402	{
+                    write-host "argument not fount"}
+                default
+                    {
+                        write-host "Application Specific error $($result.error.code) occured"
+                    } 
+                }
+        break
+    }
 Write-Verbose $result
 write-output $result
 }
 
 
-#system.listMethods
+#Device.getNewDeviceCount
+function Get-CCU2NewDevicesCount
+{
+[CmdletBinding()]
+param(
+$session_id = $global:ccu2session,
+$ccu2url = $global:ccu2url
+)
+$method = "Device.getNewDeviceCount"
+$Json = [ordered]@{   "jsonrpc" = "1.1";
+            "method"= $method;
+            "params"                 = @{'_session_id_' = $session_id}
+            "id" = 1 }| ConvertTo-Json -Compress
+write-verbose "Calling method $method with $json"
+(Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
+}
 
+#system.listMethods
 function Get-CCU2Methods
 {
 [CmdletBinding()]
@@ -400,7 +459,7 @@ param(
 $ccu2url = $global:ccu2url
 )
 $method = "system.listMethods"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method
             "params"= ""
             "id" = 1 }| ConvertTo-Json -Compress
@@ -415,7 +474,7 @@ function Get-CCU2methodHelp {
         $ccu2url = $global:ccu2url
     )
     $method = "system.methodHelp"
-    $Json = @{   "jsonrpc" = "1.1"
+    $Json = [ordered]@{   "jsonrpc" = "1.1"
         "method"           = $method
         "params"           = @{"name" = $Methodname}
         "id"               = 1 
@@ -433,7 +492,7 @@ param(
 $ccu2url = $global:ccu2url
 )
 $method = "system.describe"
-$Json = @{   "jsonrpc" = "1.1"
+$Json = [ordered]@{   "jsonrpc" = "1.1"
             "method"= $method
             "params"= ""
             "id" = 1 }| ConvertTo-Json -Compress
