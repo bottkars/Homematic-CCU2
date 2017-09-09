@@ -14,8 +14,6 @@ function Get-CCU2Version {
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
-
-
 #CCU.restartSSHDaemon
 function Restart-CCU2SSHDaemon {
     [CmdletBinding()]
@@ -48,8 +46,6 @@ function Get-CCU2SSHState {
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
 #CCU.getStickyUnreachState
-
-
 function Get-CCU2StickyUnreachState {
     [CmdletBinding()]
     param(
@@ -80,9 +76,6 @@ function Get-CCU2Serialnumber {
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
 }
-
-
-
 function Get-CCU2DeviceDetails {
     [CmdletBinding()]
     param(
@@ -99,8 +92,6 @@ function Get-CCU2DeviceDetails {
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
 }
-
-
 function Get-CCU2Interfaces {
     [CmdletBinding()]
     param(
@@ -113,7 +104,6 @@ function Get-CCU2Interfaces {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
 }
@@ -135,13 +125,9 @@ function Get-CCU2Device {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
-
-
-
 #Device.listAll
 function Get-CCU2ConfiguredDevices {
     [CmdletBinding()]
@@ -155,13 +141,10 @@ function Get-CCU2ConfiguredDevices {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result
 }
-
 #Interface.getDeviceDescription
-
 function Get-CCU2DeviceDescription {
     [CmdletBinding()]
     param(
@@ -180,7 +163,6 @@ function Get-CCU2DeviceDescription {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json"
     (Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json").result 
 }
@@ -241,8 +223,6 @@ function Get-CCU2HmIPInstallMode {
     write-verbose "Calling method $method with $json" 
     Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
 }
-
-
 #Interface.setInstallModeHMIP
 #_session_id_ installMode interface on time address key keymode
 function Set-CCU2HmIPInstallMode {
@@ -266,14 +246,10 @@ function Set-CCU2HmIPInstallMode {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json" 
     Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
 }
-
-
 #Interface.refreshDeployedDeviceFirmwareList
-
 function Update-CCU2DeployedDeviceFirmwareList {
     [CmdletBinding()]
     param(
@@ -292,9 +268,7 @@ function Update-CCU2DeployedDeviceFirmwareList {
     write-verbose "Calling method $method with $json" 
     Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
 }
-
 #Interface.updateFirmware
-
 function Update-CCU2DeviceFirmware {
     [CmdletBinding()]
     param(
@@ -313,7 +287,6 @@ function Update-CCU2DeviceFirmware {
         }
         "id"                        = 1 
     }| ConvertTo-Json -Compress
-
     write-verbose "Calling method $method with $json" 
     Invoke-CCU2method -Uri $ccu2url -body $json -Method Post -ContentType "application/json"
 }
@@ -342,7 +315,6 @@ function Connect-CCU2 {
     $host.ui.RawUI.WindowTitle = "Connected to $ccu2_name with SessionID $($Global:ccu2session) as $Username"
     Write-Output $Login
 }
-
 function Disconnect-CCU2 {
     [CmdletBinding()]
     param(
@@ -374,7 +346,6 @@ function Update-CCU2Session {
     write-verbose "Calling method $method with $json"
     Invoke-CCU2method -Uri $ccu2_url -body $Json -Method Post -ContentType "application/json"
     $host.ui.RawUI.WindowTitle = "Windows Powershell"
-    
 }
 
 function Invoke-CCU2method {
@@ -470,7 +441,6 @@ function Get-CCU2NewDevicesCount {
 function Get-CCU2Methods {
     [CmdletBinding()]
     param(
-        #$session_id = $global:ccu2session,
         $ccu2url = $global:ccu2url
     )
     $method = "system.listMethods"
